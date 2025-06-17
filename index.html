@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>minecraftwiki</title>
+  <style>
+    @font-face {
+      font-family: 'Minecraft';
+      src: url('Minecraft.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      background-color: #1a1a1a;
+      font-family: 'Minecraft', monospace;
+    }
+
+    .toolbar {
+      background-color: #c0c0c0;
+      background-image: url('stone-texture.png');
+      background-size: 64px 64px;
+      background-repeat: repeat;
+      padding: 4px;
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      border-bottom: 2px solid gray;
+    }
+
+    .cd-player {
+      position: fixed;
+      top: 190px;
+      left: 180px;
+      cursor: move;
+      user-select: none;
+      width: 440px;
+      background-image: url('흙.png');
+      background-size: 64px 64px;
+      background-repeat: repeat;
+      border: none;
+      font-size: 12px;
+      z-index: 9999;
+      box-shadow: inset -2px -2px 0 #003300, inset 2px 2px 0 #3c2810, 0 0 0 2px #3c2810;
+    }
+
+    .cd-controls {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cd-controls button {
+      flex: 1;
+      height: 18px;
+      margin-right: 2px;
+      font-size: 10px;
+      background-color: #d4d0c8;
+      border: none;
+      box-shadow: inset 0 1px 0 #fff, inset 1px 0 0 #fff, 2px 2px 0 #000;
+      padding: 0;
+    }
+
+    .cd-controls button:last-child {
+      margin-right: 0;
+    }
+
+    .cd-controls button:active,
+    .cd-controls button.active {
+      border: 2px inset #000;
+      box-shadow: inset 1px 1px #000;
+    }
+
+    .sidebar {
+      width: 200px;
+      height: 500px;
+      margin-top: 0px;
+      margin-left: 15px;
+      background: transparent;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .cd-input {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 4px;
+      border: 2px inset #7a5b36;
+      background-color: #fff;
+      padding: 1px;
+      box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;
+    }
+
+    .main-content {
+      display: flex;
+      margin-top: 40px;
+      background-image: url('빛나무.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .sidebar {
+      width: 200px;
+      height: 500px;
+      margin-top: 0px;
+      margin-left: 15px;
+      background-image: url('home1.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .sidebar:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1);
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      background-image: url('빛나무.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      text-align: center;
+    }
+
+    .cd-player .slider::-webkit-slider-thumb,
+    .cd-player .slider::-moz-range-thumb {
+      width: 14px;
+      height: 18px;
+      background: #bca176;
+      border: 2px outset #7a5b36;
+      box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;
+      cursor: pointer;
+      border-radius: 0 !important;
+  cursor: pointer;
+  border-radius: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.cd-player .slider::-webkit-slider-thumb,
+.cd-player .slider::-moz-range-thumb {
+  width: 14px;
+  height: 18px;
+  background: #bca176;
+  border: 2px outset #7a5b36;
+  box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;
+  cursor: pointer;
+  border-radius: 0 !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+</style>
+</head>
+<body>
+  <!-- 전체 HTML 콘텐츠 시작 -->
+
+<div class="toolbar"><div style="margin-left: auto; display: flex; align-items: center; gap: 4px; position: relative;">
+    <input type="text" placeholder="🔍 몹 이름을 입력하세요..." style="width: 260px; height: 24px; padding: 2px 6px; font-size: 13px; border: 2px inset #aaa; background-color: #fff; box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;">
+    <button style="width: 60px; height: 26px; padding: 2px 0; font-size: 13px; border: 2px outset #ccc; background-color: #d4d0c8; box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #999; cursor: pointer;">검색</button>
+    <div id="search-results" style="position: absolute; top: 46px; left: 0; width: 260px; background-color: #fff; border: 1px solid #aaa; z-index: 1000; display: none; font-size: 13px; font-family: 'Minecraft', monospace;"></div>
+  </div>
+</div>
+  </div>
+<div class="cd-player">
+  <div style="background-image: url('잔디.png'); background-size: 64px 64px; background-repeat: repeat; color: white; display: flex; justify-content: space-between; align-items: center; padding: 2px 6px; font-size: 12px; border-bottom: 2px solid #003300; border-top: 2px outset #4a7731;">
+    <span style="font-weight: bold;">CD Player</span>
+    <span style="display: flex; gap: 4px;">
+      <span onclick="minimizePlayer()" style="width: 16px; height: 16px; background-color: #fff; color: black; text-align: center; line-height: 16px; border: 1px solid #000; font-weight: bold; font-family: monospace; cursor: pointer;">&#x2013;</span>
+      <span onclick="maximizePlayer()" style="width: 16px; height: 16px; background-color: #fff; color: black; text-align: center; line-height: 16px; border: 1px solid #000; font-weight: bold; font-family: monospace; cursor: pointer;">&#9633;</span>
+      <span onclick="closePlayer()" style="width: 16px; height: 16px; background-color: #fff; color: black; text-align: center; line-height: 16px; border: 1px solid #000; font-weight: bold; font-family: monospace; cursor: pointer;">&#10005;</span>
+    </span>
+  </div>
+  <div style="display: flex; padding: 10px 12px 16px 12px;">
+    <div style="width: 120px; height: 120px; margin-top: 12px; background-color: transparent; margin-right: 8px; border: none; box-shadow: none; display: flex; justify-content: center; align-items: center;">
+      <img src="브금.png" alt="album" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    <div style="flex: 1;">
+      <div style="margin-bottom: 6px;">Artist:&nbsp;&nbsp;<input class="cd-input" type="text" id="artist" value="track1" readonly></div>
+      <div style="margin-bottom: 6px;">Track:&nbsp;&nbsp;<input class="cd-input" type="text" id="track" value="track1" readonly></div>
+      <input type="range" id="slider" class="slider" min="0" max="100" value="0" style="width: 100%; height: 12px;">
+      <div class="cd-controls" style="margin-top: 8px;">
+        <button onclick="prevSong()">◀◀</button>
+        <button onclick="rewind()">◁</button>
+        <button id="playBtn" onclick="togglePlayButton(this)">▶</button>
+        <button onclick="forward()">▷</button>
+        <button onclick="nextSong()">▶▶</button>
+      </div>
+    </div>
+  </div>
+  <audio id="audio" src=""></audio>
+</div>
+
+<div style="width: 100%; height: 240px; background-color: #ccc; background-image: url('head.jpg'); background-size: cover; background-position: center;"></div>
+
+<div class="main-content">
+  <div style="display: flex; flex-direction: column;">
+    <a href="https://www.minecraft.net/ko-kr" target="_blank" style="text-decoration: none;"><div class="sidebar"></div></a>
+    <a href="https://www.minecraftskins.com/" target="_blank" style="text-decoration: none;">
+      <div class="sidebar" style="margin-top: 12px; background-image: url('home1.jpg');"></div>
+    </a>
+  </div>
+
+
+
+  <div class="content">
+
+    <div style="font-size: 16px; font-weight: bold; margin-top: 0; margin-bottom: 12px;">The Overworld</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; justify-items: center; padding: 30px; max-width: 860px; margin: 0 auto; justify-content: center;">
+      <a href="http://127.0.0.1:5500/h2/zombie.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="좀비.png" alt="좀비" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">좀비</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/skeleton.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="스켈레톤.png" alt="스켈레톤" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">스켈레톤</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/spider.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="거미.png" alt="거미" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">거미</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/creeper.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="크리퍼.png" alt="크리퍼" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">크리퍼</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/enderman.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="엔더맨.png" alt="엔더맨" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">엔더맨</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/slime.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="슬라임.png" alt="슬라임" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">슬라임</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/witch.html" style="text-decoration: none; color: black; text-align: center;">
+  <div style="transition: transform 0.2s ease, filter 0.2s ease;" 
+       onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" 
+       onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" 
+       onmousedown="this.style.transform='scale(0.97)'" 
+       onmouseup="this.style.transform='scale(1)'">
+    <img src="마녀.png" alt="마녀" style="width: auto; height: 72px;">
+  </div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">마녀</div>
+      </a>
+      <a href="http://127.0.0.1:5500/h2/silverfish.html" style="text-decoration: none; color: black; text-align: center;">
+        <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)'" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'"><img src="좀벌레.png" alt="좀벌레" style="width: auto; height: 72px;"></div>
+        <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">좀벌레</div>
+      </a>
+    </div>
+
+    <div style="font-size: 16px; font-weight: bold; margin-top: 40px; margin-bottom: 12px;">The Nether</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; justify-items: center; padding: 30px; max-width: 860px; margin: 0 auto;">
+  <a href="http://127.0.0.1:5500/h2/piglin.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="피글린.png" alt="피글린" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">피글린</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/hoglin.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="호글린.png" alt="호글린" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">호글린</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/ghast.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="가스트.png" alt="가스트" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">가스트</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/magma_cube.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="마그마 큐브.png" alt="마그마 큐브" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">마그마 큐브</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/blaze.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="블레이즈.png" alt="블레이즈" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">블레이즈</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/wither_skeleton.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="위더 스켈레톤.png" alt="위더 스켈레톤" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">위더 스켈레톤</div>
+  </a>
+</div>
+
+<div style="font-size: 16px; font-weight: bold; margin-top: 40px; margin-bottom: 12px;">The End</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; justify-items: center; padding: 30px; max-width: 860px; margin: 0 auto;">
+  <a href="http://127.0.0.1:5500/h2/enderman.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="엔더맨.png" alt="엔더맨" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">엔더맨</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/shulker.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="셜커.png" alt="셜커" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">셜커</div>
+  </a>
+  <a href="http://127.0.0.1:5500/h2/ender_dragon.html" style="text-decoration: none; color: black; text-align: center;">
+    <div style="transition: transform 0.2s ease, filter 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'" onmouseout="this.style.transform='scale(1)'; this.style.filter='brightness(1)';" onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)';">
+      <img src="엔더 드래곤.png" alt="엔더 드래곤" style="width: auto; height: 72px;">
+    </div>
+    <div style="margin-top: 6px; font-size: 13px; font-weight: bold;">엔더 드래곤</div>
+  </a>
+</div>
+    <!-- 몹 카드, 몹 추가 로그, TMI 코너 등을 이곳에 계속 삽입합니다 -->
+  </div>
+</div>
+
+<div style="display: flex; gap: 20px; max-width: 1000px; margin: 40px auto;">
+  <div style="flex: 1; background-color: #ece8d9; border: 2px inset #999; padding: 16px; box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;">
+    <h3 style="margin-top: 0; font-size: 15px;">📰 마인크래프트 뉴스</h3>
+    <ul style="text-align: left; font-size: 13px; line-height: 1.6; padding-left: 18px;">
+    <li><a href="https://www.minecraft.net/en-us/article/armored-paws--minecraft-1-21-0" target="_blank" style="text-decoration: none; color: black;">1.21.0 업데이트 - Armored Paws 정식 출시 (2025)</a></li>
+    <li><a href="https://www.minecraft.net/en-us/article/minecraft-monthly--may-2025" target="_blank" style="text-decoration: none; color: black;">2025년 5월 마인크래프트 월간 뉴스</a></li>
+    <li><a href="https://www.minecraft.net/en-us/article/snapshot-25w13a" target="_blank" style="text-decoration: none; color: black;">스냅샷 25w13a 공개: 베이비 고양이 방패 기능 추가</a></li>
+  </ul>
+</div>
+
+ <div style="flex: 1; background-color: #f2e7c8; border: 2px inset #999; padding: 16px; box-shadow: inset -2px -2px 0 #c8b498, inset 2px 2px 0 #3c2810;">
+    <h3 style="margin-top: 0; font-size: 15px;">💡 TMI 코너</h3>
+    <p id="tmi-text" style="font-size: 13px; line-height: 1.5; text-align: left;">로딩 중...</p>
+  </p>
+</div>
+
+<script>
+  const songs = [
+    { src: "Minecraft.mp3", title: "Minecraft", artist: "c418", img: "브금.png" },
+    { src: "wet Hands.mp3", title: "wet Hands", artist: "c418", img: "브금.png" },
+    { src: "Haggstrom.mp3", title: "Haggstrom", artist: "c418", img: "브금.png" }
+  ];
+
+  let currentIndex = 0;
+  const audio = document.getElementById('audio');
+  const titleInput = document.getElementById('track');
+  const artistInput = document.getElementById('artist');
+  const slider = document.getElementById('slider');
+  const playBtn = document.getElementById('playBtn');
+
+  function loadSong(index) {
+    audio.src = songs[index].src;
+    titleInput.value = songs[index].title;
+    artistInput.value = songs[index].artist;
+  }
+
+  function playPause() {
+    if (audio.paused) {
+      audio.play();
+      updatePlayButtonState(true);
+    } else {
+      audio.pause();
+      updatePlayButtonState(false);
+    }
+  }
+
+  function togglePlayButton(button) {
+    playPause();
+  }
+
+  function updatePlayButtonState(isPlaying) {
+    if (isPlaying) {
+      playBtn.classList.add("active");
+    } else {
+      playBtn.classList.remove("active");
+    }
+  }
+
+  function nextSong() {
+    currentIndex = (currentIndex + 1) % songs.length;
+    loadSong(currentIndex);
+  }
+
+  function prevSong() {
+    currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+    loadSong(currentIndex);
+  }
+
+  function rewind() {
+    audio.currentTime = 0;
+  }
+
+  function forward() {
+    audio.currentTime += 10;
+  }
+
+  slider.addEventListener('input', function () {
+    const percent = slider.value / 100;
+    audio.currentTime = percent * audio.duration;
+  });
+
+  audio.addEventListener('timeupdate', function () {
+    const percent = (audio.currentTime / audio.duration) * 100;
+    slider.value = percent || 0;
+  });
+
+  audio.addEventListener('ended', function () {
+    nextSong();
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSong(currentIndex);
+  });
+</script>
+
+<script>
+  const player = document.querySelector('.cd-player');
+  const dragHandle = player;
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  dragHandle.style.cursor = 'move';
+
+  dragHandle.addEventListener('mousedown', (e) => {
+    if (
+      e.target.tagName === 'BUTTON' ||
+      e.target.type === 'range' ||
+      e.target.id === 'track' ||
+      e.target.id === 'artist'
+    ) return;
+    isDragging = true;
+    offsetX = e.offsetX;
+    offsetY = e.offsetY;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      player.style.left = `${e.clientX - offsetX}px`;
+      player.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  function minimizePlayer() {
+    player.style.height = '32px';
+    player.style.overflow = 'hidden';
+  }
+
+  function maximizePlayer() {
+    player.style.height = '';
+    player.style.overflow = '';
+  }
+
+  function closePlayer() {
+    const miniBtn = document.createElement('button');
+    miniBtn.innerHTML = '<img src="tnt.png" alt="TNT" style="width: 96px; height: 96px; object-fit: contain; border: none;">';
+    miniBtn.style.position = 'fixed';
+    miniBtn.style.top = '140px';
+    miniBtn.style.left = '0'; miniBtn.style.marginLeft = '0'; miniBtn.style.transform = 'translateX(0)';
+    miniBtn.style.width = '96px';
+    miniBtn.style.height = '96px';
+    miniBtn.style.fontSize = '18px';
+    miniBtn.style.zIndex = '10000';
+    miniBtn.style.cursor = 'pointer';
+    miniBtn.style.transition = 'opacity 0.3s ease';
+    miniBtn.style.border = 'none';
+    miniBtn.style.backgroundColor = 'transparent';
+    miniBtn.style.fontFamily = 'Minecraft';
+    miniBtn.style.boxShadow = 'none';
+
+    const rect = player.getBoundingClientRect();
+    const targetX = 0 - rect.left;
+    const targetY = 140 - rect.top;
+
+    player.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+    player.style.transformOrigin = 'top left';
+    player.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.05)`;
+    player.style.opacity = '0';
+
+    setTimeout(() => {
+      player.style.display = 'none';
+      document.body.appendChild(miniBtn);
+
+      let miniDragging = false;
+    let miniOffsetY = 0;
+
+    miniBtn.addEventListener('mousedown', (e) => {
+      miniDragging = true;
+      miniOffsetY = e.offsetY;
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (miniDragging) {
+        const newTop = e.clientY - miniOffsetY;
+        const maxTop = window.innerHeight - miniBtn.offsetHeight;
+        const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+        miniBtn.style.top = `${clampedTop}px`;
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      miniDragging = false;
+    });
+
+    miniBtn.addEventListener('click', () => {
+      if (miniDragging) {
+        miniDragging = false;
+        return;
+      }
+      player.style.display = 'block';
+      player.style.opacity = '1';
+      player.style.transform = 'none';
+      miniBtn.remove();
+      });
+    }, 400);
+  }
+</script>
+
+<!-- 전체 HTML 콘텐츠 끝 -->
+<script>
+  const mobData = [
+    { name: "좀비", link: "http://127.0.0.1:5500/h2/zombie.html" },
+    { name: "스켈레톤", link: "http://127.0.0.1:5500/h2/skeleton.html" },
+    { name: "거미", link: "http://127.0.0.1:5500/h2/spider.html" },
+    { name: "크리퍼", link: "http://127.0.0.1:5500/h2/creeper.html" },
+    { name: "엔더맨", link: "http://127.0.0.1:5500/h2/enderman.html" },
+    { name: "슬라임", link: "http://127.0.0.1:5500/h2/slime.html" },
+    { name: "마녀", link: "http://127.0.0.1:5500/h2/witch.html" },
+    { name: "좀벌레", link: "http://127.0.0.1:5500/h2/silverfish.html" },
+    { name: "피글린", link: "http://127.0.0.1:5500/h2/piglin.html" },
+    { name: "호글린", link: "http://127.0.0.1:5500/h2/hoglin.html" },
+    { name: "가스트", link: "http://127.0.0.1:5500/h2/ghast.html" },
+    { name: "마그마 큐브", link: "http://127.0.0.1:5500/h2/magma_cube.html" },
+    { name: "블레이즈", link: "http://127.0.0.1:5500/h2/blaze.html" },
+    { name: "위더 스켈레톤", link: "http://127.0.0.1:5500/h2/wither_skeleton.html" },
+    { name: "셜커", link: "http://127.0.0.1:5500/h2/shulker.html" },
+    { name: "엔더 드래곤", link: "http://127.0.0.1:5500/h2/ender_dragon.html" }
+  ];
+
+  const searchInput = document.querySelector('.toolbar input[type="text"]');
+  const searchResults = document.getElementById('search-results');
+
+  searchInput.addEventListener('input', () => {
+    const keyword = searchInput.value.trim();
+    searchResults.innerHTML = '';
+
+    if (keyword === '') {
+      searchResults.style.display = 'none';
+      return;
+    }
+
+    const filtered = mobData.filter(mob => mob.name.includes(keyword));
+    if (filtered.length === 0) {
+      searchResults.style.display = 'none';
+      return;
+    }
+
+    filtered.forEach(mob => {
+      const item = document.createElement('div');
+      item.textContent = mob.name;
+      item.style.padding = '6px';
+      item.style.cursor = 'pointer';
+      item.style.borderBottom = '1px solid #ccc';
+
+      item.addEventListener('mouseover', () => {
+        item.style.backgroundColor = '#eee';
+      });
+      item.addEventListener('mouseout', () => {
+        item.style.backgroundColor = '#fff';
+      });
+      item.addEventListener('click', () => {
+        window.location.href = mob.link;
+      });
+
+      searchResults.appendChild(item);
+    });
+
+    searchResults.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.style.display = 'none';
+    }
+  });
+</script>
+<script>
+  const tmiList = [
+    '엔더 드래곤은 오직 The End에서만 등장한다.',
+    '크리퍼는 번개를 맞으면 충전 크리퍼로 변한다.',
+    '좀비는 낮에는 햇빛에 타서 죽는다.',
+    '엔더맨은 눈을 마주치면 공격한다.',
+    '스켈레톤은 활을 쏘는 원거리 공격 몹이다.',
+    '마그마 큐브는 점프하면서 공격하고 분열한다.',
+    '피글린은 금 장비를 착용하면 공격하지 않는다.',
+    '위더 스켈레톤은 위더 상태 이상을 부여한다.',
+    '호글린은 네더에서만 등장하고 돼지고기를 드랍한다.',
+    '셜커는 플레이어를 공중에 띄우는 탄을 발사한다.'
+  ];
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const tmiText = document.getElementById('tmi-text');
+    const randomIndex = Math.floor(Math.random() * tmiList.length);
+    tmiText.textContent = tmiList[randomIndex];
+  });
+</script>
+</body>
+</html>
