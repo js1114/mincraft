@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>마인크래프트 주민 정보 - 스폰</title>
+  <style>
+    @font-face {
+      font-family: 'Galmuri11';
+      src: url('Galmuri11.ttf') format('truetype');
+    }
+
+    * {
+      font-family: 'Galmuri11', sans-serif !important;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: url('빛나무.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .overlay {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      height: 100vh;
+      position: relative;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 160px;
+    }
+
+    
+  .category-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .category-button {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid #555;
+    box-shadow: inset -2px -2px 0 #222, inset 2px 2px 0 #777;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+    background-size: 60px;
+    background-repeat: repeat;
+    opacity: 0.95;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .category-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4), inset -2px -2px 0 #222, inset 2px 2px 0 #777;
+  }
+
+  .category-button:active {
+    transform: scale(0.98);
+    box-shadow: inset 1px 1px 3px #000;
+  }
+
+    .spawn-text-box {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 30px 40px;
+      width: 100%;
+      height: 500px; /* ✅ 이 값 고정 */
+      overflow-y: auto;
+      border: 2px solid #555;
+      box-shadow: inset -3px -3px 0 #222, inset 3px 3px 0 #777;
+      background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+      background-size: 60px;
+      background-repeat: repeat;
+      opacity: 0.98;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .right-panel {
+      display: flex;
+      align-items: flex-end;
+      position: sticky;
+      top: 220px; /* 중간 박스와 시각적으로 일치하는 위치로 조정 */
+      right: 40px;
+    }
+
+    .info-box {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 30px;
+      width: 280px;
+      height: 500px;
+      border: 2px solid #555;
+      box-shadow: inset -3px -3px 0 #222, inset 3px 3px 0 #777;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+      background-size: 60px;
+      background-repeat: repeat;
+      opacity: 0.98;
+    }
+.info-box img {
+  height: 380px;
+  max-width: 100%;
+  object-fit: contain;
+  position: absolute;
+  top: -200px;
+}
+
+
+    .info-box .title {
+      font-size: 22px;
+      margin-bottom: 25px;
+      z-index: 1;
+    }
+
+    .info-box .stat {
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      text-align: left;
+      padding-left: 10px;
+    }
+  @keyframes zombieHit {
+  0% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-4px, 0) rotate(-2deg); }
+  40% { transform: translate(4px, 0) rotate(2deg); }
+  60% { transform: translate(-2px, 0) rotate(-1deg); }
+  80% { transform: translate(2px, 0) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.info-box img.hit {
+  animation: zombieHit 0.3s ease;
+}
+.heart-fly {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+
+  object-fit: contain;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -20px;
+  animation: flyHeart 0.6s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes flyHeart {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+}
+
+@keyframes zombieHit {
+  0% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-4px, 0) rotate(-2deg); }
+  40% { transform: translate(4px, 0) rotate(2deg); }
+  60% { transform: translate(-2px, 0) rotate(-1deg); }
+  80% { transform: translate(2px, 0) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.info-box img.hit {
+  animation: zombieHit 0.3s ease;
+}
+@keyframes flyHeart {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+}
+
+
+.variant-link {
+  color: yellow;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.variant-link:hover {
+  color: #ffd700;
+}
+</style>
+</head>
+<body>
+  
+
+  <img id="heart-template" src="heart.png" style="display: none;">
+  <div class="overlay">
+    <a href="/mincraftwiki/">
+    <img class="logo" src="로고.png" alt="로고">
+   </a>
+    <!-- 중앙 스크롤 영역 -->
+    <div class="scroll-container" style="margin-right: 40px;">
+      <div class="category-buttons" style="position: absolute; top: 140px; left: 80px; display: flex; gap: 12px; z-index: 5;">
+        <div class="category-button" id="tab-spawn">스폰</div>
+        <div class="category-button" id="tab-variant">변종</div>
+        <div class="category-button" id="tab-behavior">행동</div>
+        <div class="category-button" id="tab-breed">번식</div>
+      </div>
+      <div class="spawn-text-box" style="margin-top: 160px; height: 500px; overflow-y: auto; width: 1080px; margin-left: auto; margin-right: auto;">
+  <h2 style="margin-bottom: 2em; text-align: center;">스폰</h2>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[자연 생성]</strong><br>
+    스켈레톤은 오버월드 내 <strong>밝기 7 이하</strong>의 장소에서 자연적으로 생성된다. 밤, 동굴, 폐광 등 어두운 공간에서 자주 등장한다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    스폰은 <strong>풀 블록 위</strong>에서 이루어지며, 주변에 충분한 공간이 필요하다. 지상에서 1~4마리씩 무리지어 생성되기도 한다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[몬스터 생성기]</strong><br>
+    던전 구조물 내부에는 스켈레톤 몬스터 생성기가 있을 수 있으며, 이곳에서는 지속적으로 스켈레톤이 생성된다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[햇빛]</strong><br>
+    낮에는 햇빛에 노출될 경우 불타지만, 헬멧을 착용하고 있을 경우에는 피해를 받지 않는다.
+  </p>
+</div>
+</div>
+
+    <!-- 오른쪽 정보 패널 -->
+    <div class="right-panel">
+      <div class="info-box">
+<img src="엔더맨.png" alt="엔더맨 전신">
+<div class="title">엔더맨</div>
+<div class="stat">생명력:        40 (♥ × 20)</div>
+<div class="stat">행동:          중립 / 적대적 (눈 마주침 시)</div>
+<div class="stat">공격력:        4~10</div>
+<div class="stat">방어력:        2 (🛡)</div>
+<div class="stat">생성:        오버월드, 네더, 엔드</div>
+
+
+      </div>
+    </div>
+  </div>
+<script>
+const box = document.querySelector('.spawn-text-box');
+document.getElementById('tab-spawn').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">스폰</h2>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[자연 생성]</strong><br>
+      엔더맨은 <strong>오버월드</strong>, <strong>네더</strong>, <strong>엔드</strong>에서 생성된다. 오버월드에서는 <strong>밤</strong>에, 특히 비가 오지 않는 <strong>사막</strong>과 <strong>버섯섬을 제외한 대부분의 바이옴</strong>에서 출현한다.
+    </p>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      <strong>엔드 차원</strong>에서는 대량으로 생성되며, 주로 <strong>엔더 드래곤과의 전투 중</strong> 바닥에 배치되어 있다.
+    </p>
+  `;
+};
+
+document.getElementById('tab-behavior').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">행동</h2>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      엔더맨은 기본적으로 <strong>중립적</strong>이지만, 플레이어가 <strong>직접 눈을 마주보면 적대적</strong>으로 변하며 공격을 시작한다.
+    </p>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      공격 시 <strong>순간이동</strong>을 하여 피해를 회피하고, 물에 닿거나 비를 맞으면 피해를 입으며 도망친다.
+    </p>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      <strong>블록을 들거나 놓는</strong> 행동을 하기도 하며, 환경을 일부 변형시킬 수 있다.
+    </p>
+  `;
+};
+
+document.getElementById('tab-breed').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">번식</h2>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      엔더맨은 <strong>번식할 수 없다.</strong> 자연 스폰이나 엔드 차원에서의 생성으로만 개체 수를 늘릴 수 있다.
+    </p>
+    <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+      플레이어나 아이템을 이용한 유도 또는 교배는 지원되지 않는다.
+    </p>
+  `;
+};
+
+document.getElementById('tab-spawn').click();
+</script>
+
+<div id="cd-player-container"></div>
+<script>
+  fetch('../cd-player.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('cd-player-container').innerHTML = html;
+      const script = document.createElement('script');
+      script.src = '../cd-player.js';
+      document.body.appendChild(script);
+    });
+</script>
+
+</body>
+</html>
