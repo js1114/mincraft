@@ -1,1 +1,1 @@
-# mincraft
+# mincraftwiki
