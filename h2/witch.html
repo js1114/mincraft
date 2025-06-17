@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>마인크래프트 주민 정보 - 스폰</title>
+  <style>
+    @font-face {
+      font-family: 'Galmuri11';
+      src: url('Galmuri11.ttf') format('truetype');
+    }
+
+    * {
+      font-family: 'Galmuri11', sans-serif !important;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: url('빛나무.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    .overlay {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      height: 100vh;
+      position: relative;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 160px;
+    }
+
+    
+  .category-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .category-button {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid #555;
+    box-shadow: inset -2px -2px 0 #222, inset 2px 2px 0 #777;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+    background-size: 60px;
+    background-repeat: repeat;
+    opacity: 0.95;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .category-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4), inset -2px -2px 0 #222, inset 2px 2px 0 #777;
+  }
+
+  .category-button:active {
+    transform: scale(0.98);
+    box-shadow: inset 1px 1px 3px #000;
+  }
+
+    .spawn-text-box {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 30px 40px;
+      width: 100%;
+      height: 500px; /* ✅ 이 값 고정 */
+      overflow-y: auto;
+      border: 2px solid #555;
+      box-shadow: inset -3px -3px 0 #222, inset 3px 3px 0 #777;
+      background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+      background-size: 60px;
+      background-repeat: repeat;
+      opacity: 0.98;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .right-panel {
+      display: flex;
+      align-items: flex-end;
+      position: sticky;
+      top: 220px; /* 중간 박스와 시각적으로 일치하는 위치로 조정 */
+      right: 40px;
+    }
+
+    .info-box {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 30px;
+      width: 280px;
+      height: 500px;
+      border: 2px solid #555;
+      box-shadow: inset -3px -3px 0 #222, inset 3px 3px 0 #777;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      background-image: url('05082037-2868-47c5-b4e6-55b30dee653c.png');
+      background-size: 60px;
+      background-repeat: repeat;
+      opacity: 0.98;
+    }
+.info-box img {
+  max-height: 280px; /* 기존보다 크게 */
+  max-width: 100%;
+  object-fit: contain;
+  position: absolute;
+  top: -130px; /* 상단 위치도 조금 올림 */
+}
+
+  
+
+    .info-box .title {
+      font-size: 22px;
+      margin-bottom: 25px;
+      z-index: 1;
+    }
+
+    .info-box .stat {
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      text-align: left;
+      padding-left: 10px;
+    }
+  @keyframes zombieHit {
+  0% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-4px, 0) rotate(-2deg); }
+  40% { transform: translate(4px, 0) rotate(2deg); }
+  60% { transform: translate(-2px, 0) rotate(-1deg); }
+  80% { transform: translate(2px, 0) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.info-box img.hit {
+  animation: zombieHit 0.3s ease;
+}
+.heart-fly {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+
+  object-fit: contain;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -20px;
+  animation: flyHeart 0.6s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes flyHeart {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+}
+
+@keyframes zombieHit {
+  0% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-4px, 0) rotate(-2deg); }
+  40% { transform: translate(4px, 0) rotate(2deg); }
+  60% { transform: translate(-2px, 0) rotate(-1deg); }
+  80% { transform: translate(2px, 0) rotate(1deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.info-box img.hit {
+  animation: zombieHit 0.3s ease;
+}
+@keyframes flyHeart {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+}
+
+
+.variant-link {
+  color: yellow;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.variant-link:hover {
+  color: #ffd700;
+}
+</style>
+</head>
+<body>
+  
+
+  <img id="heart-template" src="heart.png" style="display: none;">
+  <div class="overlay">
+    <a href="../index.html">
+    <img class="logo" src="로고.png" alt="로고">
+   </a>
+    <!-- 중앙 스크롤 영역 -->
+    <div class="scroll-container" style="margin-right: 40px;">
+      <div class="category-buttons" style="position: absolute; top: 140px; left: 80px; display: flex; gap: 12px; z-index: 5;">
+        <div class="category-button" id="tab-spawn">스폰</div>
+        <div class="category-button" id="tab-variant">변종</div>
+        <div class="category-button" id="tab-behavior">행동</div>
+        <div class="category-button" id="tab-breed">번식</div>
+      </div>
+      <div class="spawn-text-box" style="margin-top: 160px; height: 500px; overflow-y: auto; width: 1080px; margin-left: auto; margin-right: auto;">
+  <h2 style="margin-bottom: 2em; text-align: center;">스폰</h2>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[자연 생성]</strong><br>
+    스켈레톤은 오버월드 내 <strong>밝기 7 이하</strong>의 장소에서 자연적으로 생성된다. 밤, 동굴, 폐광 등 어두운 공간에서 자주 등장한다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    스폰은 <strong>풀 블록 위</strong>에서 이루어지며, 주변에 충분한 공간이 필요하다. 지상에서 1~4마리씩 무리지어 생성되기도 한다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[몬스터 생성기]</strong><br>
+    던전 구조물 내부에는 스켈레톤 몬스터 생성기가 있을 수 있으며, 이곳에서는 지속적으로 스켈레톤이 생성된다.
+  </p>
+  <p style="margin-top: 0; margin-bottom: 1.6em; background-color: rgba(0, 0, 0, 0.3); padding: 6px 10px; border-radius: 4px;">
+    <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[햇빛]</strong><br>
+    낮에는 햇빛에 노출될 경우 불타지만, 헬멧을 착용하고 있을 경우에는 피해를 받지 않는다.
+  </p>
+</div>
+</div>
+
+    <!-- 오른쪽 정보 패널 -->
+    <div class="right-panel">
+      <div class="info-box">
+<img src="마녀.png" alt="마녀 전신">
+<div class="title">마녀</div>
+<div class="stat">생명력:        26 (♥ × 13)</div>
+<div class="stat">행동:          적대적</div>
+<div class="stat">공격력:        물약 투척 (간접 피해)</div>
+<div class="stat">방어력:        2 (🛡)</div>
+<div class="stat">생성:        늪지대 / 마녀 오두막</div>
+
+      </div>
+    </div>
+  </div>
+<script>
+const box = document.querySelector('.spawn-text-box');
+document.getElementById('tab-spawn').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">스폰</h2>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      <strong style="font-size: 18px; font-weight: bold; color: #00ff00;">[늪지대]</strong><br>
+      마녀는 <strong>늪지대</strong>에서 <strong>밝기 7 이하</strong>의 조건에서 자연적으로 생성된다. 주로 밤에 등장한다.
+    </p>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      또한, <strong>마녀 오두막</strong>이라는 구조물 내부에는 항상 마녀 한 마리가 생성되어 있으며, 플레이어가 접근해도 리스폰된다.
+    </p>`;
+};
+
+document.getElementById('tab-variant').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">변종</h2>
+    <p style="margin-bottom: 2em; text-align: center; color: #ccc;">
+      마녀는 별도의 변종이 존재하지 않는다.
+    </p>`;
+};
+
+document.getElementById('tab-behavior').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">행동</h2>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      마녀는 <strong>유해한 물약</strong>을 투척하는 몹으로, 플레이어를 감지하면 <strong>독, 둔화, 약화, 피해</strong> 등의 포션을 던진다.
+    </p>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      또한 자신이 피해를 입을 경우, <strong>회복 물약</strong>이나 <strong>화염 저항 물약</strong>을 마셔 생존력을 높인다.
+    </p>`;
+};
+
+document.getElementById('tab-breed').onclick = () => {
+  box.innerHTML = `
+    <h2 style="margin-bottom: 2em; text-align: center;">번식</h2>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      마녀는 <strong>번식이 불가능한 몹</strong>이다. 자연적으로만 스폰되며, 개체 수를 늘리기 위해선 <strong>늪지대 탐색</strong>이 필요하다.
+    </p>
+    <p style="margin-bottom: 1.6em; background-color: rgba(0,0,0,0.3); padding: 6px 10px; border-radius: 4px;">
+      <strong>마녀 오두막</strong> 구조물을 활용하면 지속적으로 마녀를 확보할 수 있다.
+    </p>`;
+};
+
+// ✅ 초기 탭 표시
+document.getElementById('tab-spawn').click();
+
+</script>
+
+<div id="cd-player-container"></div>
+<script>
+  fetch('../cd-player.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('cd-player-container').innerHTML = html;
+      const script = document.createElement('script');
+      script.src = '../cd-player.js';
+      document.body.appendChild(script);
+    });
+</script>
+
+</body>
+</html>
